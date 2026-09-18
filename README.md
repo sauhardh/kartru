@@ -1,4 +1,4 @@
-# कर्तृ (Kartṛ)
+# कर्तृ (Kartṛ) / Kartru
 
 A minimal, fast CLI coding agent written in Rust. **Kartṛ** (_the doer / agent_) autonomously plans, inspects, and executes tasks using an LLM-driven tool-use loop.
 
