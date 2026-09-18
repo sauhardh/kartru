@@ -1,0 +1,15 @@
+[package]
+name = "Kartṛ"
+version = "0.1.0"
+authors = ["sauhardhakafle12<at>gmail<dot>com"]
+edition = "2024"
+rust-version = "1.96"
+
+[dependencies]
+tokio = { version = "1", features = ["full"] }                                 # async runtime
+async-openai = { version = "=0.32.4", features = ["byot", "chat-completion"] }
+clap = { version = "4.3.14", features = ["derive"] }                           # CLI argument parsing
+serde = { version = "1", features = ["derive"] }
+serde_json = "1.0.149"                                                         # JSON serialization/deserialization
+thiserror = "2.0.20"
+dotenv = "0.15.0"
