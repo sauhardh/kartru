@@ -10,7 +10,6 @@ mod utils;
 use constants::{DEFAULT_BASE_URL, MODEL};
 use llm::response::Response;
 use llm::{call_ai, create_client};
-use tools::execute::ReadTool;
 use utils::Args;
 
 extern crate dotenv;
@@ -18,7 +17,7 @@ extern crate dotenv;
 use dotenv::dotenv;
 
 use crate::agent::Agent;
-use crate::tools::execute::{BashTool, WriteTool};
+use crate::tools::execute::{BashTool, ReadTool, WriteTool};
 use crate::tools::registry::ToolRegistry;
 
 #[tokio::main]
@@ -51,7 +50,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             break;
         }
 
-        let response: Response = call_ai(&client, &agent.messages).await?;
+        let response: Response = call_ai(&client, &agent.messages, &registry.definitions()).await?;
         let choice = response
             .first_choice()
             .ok_or_else(|| "Choice is empty".to_string())?;
@@ -72,7 +71,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         }
 
         for tool in &choice.message.tool_calls {
-            let result = registry.execute(&tool.function.name, &tool.function.arguments)?;
+            let result = registry
+                .execute(&tool.function.name, &tool.function.arguments)
+                .await?;
 
             // TOOL
             agent.insert_tool(result, tool.id.clone());

@@ -78,7 +78,7 @@ impl Agent {
     /// Message sent by an AI.
     /// AI doesnot execute tools, it only requests. So, `tool_call_id`: `None` and not in
     /// parameters.
-    /// However, there is `tool_calls` because it's the tools that are requested by AI to run on
+    /// There is `tool_calls` because it's the tools that are requested by AI to run on
     /// computer.
     pub fn insert_assistant(
         &mut self,

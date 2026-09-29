@@ -5,7 +5,7 @@ use std::env;
 
 use crate::agent::AgentMessage;
 use crate::llm::response::Response;
-use crate::tools::advertise::{bash_tools, read_tools, write_tools};
+use crate::tools::define::ToolDefinition;
 use crate::{DEFAULT_BASE_URL, MODEL};
 
 pub fn create_client() -> Result<Client<OpenAIConfig>, Box<dyn std::error::Error>> {
@@ -19,16 +19,28 @@ pub fn create_client() -> Result<Client<OpenAIConfig>, Box<dyn std::error::Error
     Ok(Client::with_config(config))
 }
 
+fn to_openai_tool(tool: &ToolDefinition) -> serde_json::Value {
+    serde_json::json!({
+        "type":"function",
+        "function":{
+            "name": tool.name,
+            "description": tool.description,
+            "parameters": tool.parameters
+        }
+    })
+}
+
 pub async fn call_ai(
     client: &Client<OpenAIConfig>,
     messages: &[AgentMessage],
+    tools: &[ToolDefinition],
 ) -> Result<Response, Box<dyn std::error::Error>> {
     let response: Response = client
         .chat()
         .create_byot(json!({
             "messages": messages,            "model": MODEL,
             "max_tokens": 4096,
-            "tools": [read_tools(), write_tools(), bash_tools()]
+            "tools": &tools.iter().map(|tool| to_openai_tool(tool)).collect::<Vec<_>>()
 
         }))
         .await?;

@@ -1,5 +1,9 @@
 use std::collections::HashMap;
 
+use async_trait::async_trait;
+
+use crate::tools::define::ToolDefinition;
+
 use super::error::ToolError;
 use super::execute::ExecutableTool;
 
@@ -14,6 +18,10 @@ impl ToolRegistry {
         Self {
             tools: HashMap::new(),
         }
+    }
+
+    pub fn definitions(&self) -> Vec<ToolDefinition> {
+        self.tools.values().map(|tool| tool.definition()).collect()
     }
 
     pub fn register<T>(&mut self, tool: T)
@@ -36,10 +44,10 @@ impl ToolRegistry {
             .map(|tool| tool.as_ref())
     }
 
-    pub fn execute(&self, name: &str, arguments: &str) -> Result<String, ToolError> {
+    pub async fn execute(&self, name: &str, arguments: &str) -> Result<String, ToolError> {
         let name = name.to_lowercase();
         let tool = self.get(&name).ok_or(ToolError::UnknownTool(name))?;
 
-        tool.execute(arguments)
+        tool.execute(arguments).await
     }
 }

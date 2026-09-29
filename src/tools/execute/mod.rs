@@ -1,13 +1,19 @@
-mod feat;
+mod mcp;
+mod native;
 
-pub use feat::bash::{BashArgs, BashTool};
-pub use feat::read::{ReadArgs, ReadTool};
-pub use feat::write::{WriteArgs, WriteTool};
+use async_trait::async_trait;
+pub use native::bash::{BashArgs, BashTool};
+pub use native::read::{ReadArgs, ReadTool};
+pub use native::write::{WriteArgs, WriteTool};
 
+use crate::tools::define::ToolDefinition;
 use crate::tools::error::ToolError;
 
+#[async_trait]
 pub trait ExecutableTool: Send + Sync {
     fn name(&self) -> &'static str;
 
-    fn execute(&self, arguments: &str) -> Result<String, ToolError>;
+    fn definition(&self) -> ToolDefinition;
+
+    async fn execute(&self, arguments: &str) -> Result<String, ToolError>;
 }
