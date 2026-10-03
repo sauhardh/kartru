@@ -1,11 +1,9 @@
 use std::collections::HashMap;
 
-use async_trait::async_trait;
-
-use crate::tools::define::ToolDefinition;
-
 use super::error::ToolError;
 use super::execute::ExecutableTool;
+
+use crate::tools::define::ToolDefinition;
 
 #[allow(dead_code)]
 pub struct ToolRegistry {

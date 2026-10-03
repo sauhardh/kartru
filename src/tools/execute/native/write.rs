@@ -17,7 +17,7 @@ pub struct WriteArgs {
 
 #[async_trait]
 impl ExecutableTool for WriteTool {
-    fn name(&self) -> &'static str {
+    fn name(&self) -> &str {
         "Write"
     }
 

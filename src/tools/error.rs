@@ -8,4 +8,7 @@ pub enum ToolError {
 
     #[error("Execution Failed: {0}")]
     Execution(#[from] std::io::Error),
+
+    #[error("MCP Error: {0}")]
+    Mcp(String),
 }

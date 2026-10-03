@@ -16,7 +16,7 @@ pub struct ReadArgs {
 
 #[async_trait]
 impl ExecutableTool for ReadTool {
-    fn name(&self) -> &'static str {
+    fn name(&self) -> &str {
         "Read"
     }
 

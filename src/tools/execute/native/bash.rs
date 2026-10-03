@@ -17,7 +17,7 @@ pub struct BashArgs {
 
 #[async_trait]
 impl ExecutableTool for BashTool {
-    fn name(&self) -> &'static str {
+    fn name(&self) -> &str {
         "Bash"
     }
 
